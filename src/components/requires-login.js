@@ -14,6 +14,7 @@ export default () => Component => {
         return <Component {...passThroughProps} />;
     }
 
+    //this is for debugging and giving useful error messages
     const displayName = Component.displayName || Component.name || 'Component';
     RequiresLogin.displayName = `RequiresLogin(${displayName})`;
 

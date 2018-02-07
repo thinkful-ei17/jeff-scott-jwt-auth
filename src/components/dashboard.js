@@ -2,9 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import requiresLogin from './requires-login';
 import {fetchProtectedData} from '../actions/protected-data';
-import {clearAuth} from '../actions/auth';
-
-let message;
+import {clearAuth, authTimerAlert} from '../actions/auth';
 
 export class Dashboard extends React.Component {
     componentDidMount() {
@@ -12,36 +10,32 @@ export class Dashboard extends React.Component {
         this.firstTimer();
     }
 
-// timerStuff(){
-//     startTimer();
 
-// }
 firstTimer(){
     console.log('the timer started');
-    const callback = function() {
-        this.secondTimer();
-        message = <p> Click something to stay logged in </p>
-        return;
-    }
-    window.setTimeout(callback, 10 * 1000);
-
+    const alert = "Session is about to expire.  CLick anywhere to extend."
+    const callback = () => this.props.dispatch(authTimerAlert(alert));
+    window.setTimeout(callback, 7 * 1000);
 }
 
 secondTimer(){
     const callback = () => this.props.dispatch(clearAuth());
-    window.setTimeout(callback, 5 * 1000);
-//    window.setTimeout(this.props.dispatch(clearAuth()), 5 * 1000)
+    window.setTimeout(callback, 3 * 1000);
 } 
 
-// }
-// startTimer() {
-//       window.setTimeout(this.props.dispatch(action), 10 * 1000);
-//     }
-
     render() {
+
+        let alert;
+        if(this.props.alert){
+            this.secondTimer(); 
+            alert = <div className='alert'><h2>{this.props.alert}</h2></div>
+           
+        }
+
         return (
+        
             <div className="dashboard">
-                {message}
+                    {alert}
                 <div className="dashboard-username">
                     Username: {this.props.username}
                 </div>
@@ -59,7 +53,8 @@ const mapStateToProps = state => {
     return {
         username: state.auth.currentUser.username,
         name: `${currentUser.firstName} ${currentUser.lastName}`,
-        protectedData: state.protectedData.data
+        protectedData: state.protectedData.data,
+        alert: state.auth.alert
     };
 };
 

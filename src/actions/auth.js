@@ -33,6 +33,14 @@ export const authError = error => ({
     error
 });
 
+export const AUTH_TIMER_ALERT = 'AUTH_TIMER_ALERT';
+export const authTimerAlert = alert => {
+    console.log('authTimerAlert was called');
+    return ({
+    type: AUTH_TIMER_ALERT,
+    alert
+    });
+};
 // Stores the auth token in state and localStorage, and decodes and stores
 // the user data stored in the token
 const storeAuthInfo = (authToken, dispatch) => {
